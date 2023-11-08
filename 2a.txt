@@ -1,0 +1,6 @@
+2.alter table student add DOB int;
+3.alter table student alter column Roll varchar(20);
+4.alter table subject raname sub_code to code;
+5.rename table subject to sub;
+6.drop table student;
+7.truncate table Marks;

@@ -1,0 +1,16 @@
+mysql> delimiter $
+mysql> create procedure Circle_area1()
+ -> Begin
+ -> Declare radi_value int;
+ -> Declare max_radi int;
+ -> Declare area_value DOUBLE;
+ -> SET radi_value = 5;
+ -> SET max_radi = 9;
+ -> WHILE radi_value <= max_radi Do
+ -> SET area_value = 3.14159 * radi_value * radi_value;
+ -> Insert into Areas(Radius,Circle_area) Values(radi_value,area_value);
+ -> SET radi_value = radi_value + 1;
+ -> END WHILE;
+ -> end $
+
+mysql> call Circle_area1()$

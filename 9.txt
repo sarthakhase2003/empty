@@ -1,0 +1,142 @@
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Scanner;
+
+public class crud {
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/hostel";
+    private static final String JDBC_USER = "root";
+    private static final String JDBC_PASSWORD = "2003";
+
+    public static void main(String[] args) {
+        try {
+            Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+            Scanner scanner = new Scanner(System.in);
+
+            while (true) {
+                System.out.println("\n******** Options: ********\n");
+                System.out.println("\t1. Insert");
+                System.out.println("\t2. Read");
+                System.out.println("\t3. Update");
+                System.out.println("\t4. Delete");
+                System.out.println("\t5. Exit");
+                System.out.print("\nEnter your choice: ");
+
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+             
+             switch (choice) {
+                case 1:
+                 // Create
+                 System.out.print("Enter Student Id to Insert: ");
+                 int createData = scanner.nextInt();
+                 scanner.nextLine(); // Consume newline                        
+                 System.out.print("Enter Student Name to Insert: ");
+                 String name = scanner.nextLine();
+                 //scanner.nextLine(); // Consume newline
+                 System.out.print("Enter Room No. to Insert: ");
+                        int room = scanner.nextInt();
+                        createData(conn, createData, name, room);
+
+                        
+                   break;
+
+               case 2:
+                   // Read
+                   System.out.println("Data List:");
+                   readData(conn);
+                   break;
+
+               case 3:
+                   // Update
+                   System.out.print("Enter ID to update: ");
+                   int updateId = scanner.nextInt();
+                   scanner.nextLine(); // Consume newline
+                   System.out.print("Enter Room No. to Update: ");
+                   String updatedData = scanner.nextLine();
+                   updateData(conn,updatedData,updateId );
+                   break;
+
+                   
+               case 4:
+                   // Delete
+                   System.out.print("Enter ID to delete: ");
+                   int deleteId = scanner.nextInt();
+                   deleteData(conn, deleteId);
+                   break;
+
+               case 5:
+                   // Exit
+                   conn.close();
+                   scanner.close();
+                   System.exit(0);
+                   break;
+
+               default:
+                    System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void createData(Connection conn, int data,String data1,int data2) throws SQLException {
+        String insertSQL = "INSERT INTO Stud_info (Stud_id,Name,Room_no) VALUES (?,?,?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+            pstmt.setInt(1, data);
+            pstmt.setString(2, data1);
+            pstmt.setInt(3, data2);
+            pstmt.executeUpdate();
+            System.out.println("Data created successfully.");
+        }
+
+    }
+      
+        
+    
+
+    private static void readData(Connection conn) throws SQLException {
+        String selectSQL = "SELECT * FROM Stud_info";
+        try (PreparedStatement pstmt = conn.prepareStatement(selectSQL);
+             ResultSet resultSet = pstmt.executeQuery()) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("Stud_id");
+                String data = resultSet.getString("Name");
+                int marks = resultSet.getInt("Room_no");
+                System.out.println("Stud ID: " + id + ", Name: " + data + ",  Room No.: " + marks);
+            }
+        }
+    }
+
+    private static void updateData(Connection conn,String newData, int id ) throws SQLException {
+        String updateSQL = "UPDATE Stud_info SET Room_no = ? WHERE Stud_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
+            pstmt.setString(1, newData);
+            pstmt.setInt(2, id);
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Data updated successfully.");
+            } else {
+              System.out.println("No data found with the given ID.");
+            }
+        }
+    }
+
+    private static void deleteData(Connection conn, int id) throws SQLException {
+        String deleteSQL = "DELETE FROM Stud_info WHERE Stud_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(deleteSQL)) {
+            pstmt.setInt(1, id);
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Data deleted successfully.");
+            } else {
+              System.out.println("No data found with the given ID.");
+            }
+        }
+    }
+}

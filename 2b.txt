@@ -1,0 +1,2 @@
+2.create view view1 as select subject;
+3.create index index1 on Marks(sub_code);

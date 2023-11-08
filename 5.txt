@@ -1,0 +1,25 @@
+Mysql>delimiter $
+create procedure calc_fine lib6(in roll int) 
+begin
+declare finel int; 
+declare noofdays int;
+declare issuedate date;
+declare exit handler for SQLEXCEPTION select 'create table definition'; 
+select DateofIssue into issuedate from Borrower where Roll_no=roll;
+select datediff(curdate(), issuedate) into noofdays;
+if noofdays>15 and noofdays<=30 then
+set finel=noofdays*5;
+insert into Fine values(roll, curdate(), finel);
+elseif noofdays>30 then
+set Finel=((noofdays-30)*50) +15*5;
+insert into Fine values(roll, curdate(), finel);
+else 
+insert into Fine values(roll, curdate(),0); 
+end if;
+update Borrower set Status='R' where Roll_no=roll; 
+end $
+
+
+call calc_fine_lib6(33)$
+
+select * from Fine$

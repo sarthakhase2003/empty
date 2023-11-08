@@ -1,0 +1,4 @@
+db.dbms.insert({name:'sarthak',roll:1})
+db.dbms.find()
+db.dbms.update({name:'sarthak'},{$set:{roll:3}})
+db.dbms.drop()

@@ -1,0 +1,5 @@
+var map=function(){emit(this. Div,this.Marks)};
+var reduce=function(Div, Marks){return Array.sum(Marks);}; 
+db.Student.mapReduce (map, reduce, {out: "resultCollection"});
+
+db.resultCollection.find()

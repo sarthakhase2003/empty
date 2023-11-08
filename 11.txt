@@ -1,0 +1,5 @@
+db.Student.createIndex({roll:1})
+db.Student.getIndexes()
+db.Student.dropIndexes()
+
+db.Student.aggregate({$group:{_id:"$name",sum{$sum:"$roll"}}})

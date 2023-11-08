@@ -1,0 +1,12 @@
+delimiter $
+create trigger after_insert 
+after insert 
+on library 
+for each row
+begin
+insert into library_audit values(new.roll_no,new.name,new.doi,new.book_name,new.status);
+end;
+$ 
+
+
+insert into library values(4,'sarthak','aabc','issue');
